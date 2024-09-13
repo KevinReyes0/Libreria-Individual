@@ -9,9 +9,7 @@ public interface ICategoriaService {
 
     public Categoria buscarCategoriaPorId(Long id);
 
-    public Boolean guardarCategoria(Categoria categoria);
+    public Categoria guardarCategoria(Categoria categoria);
 
     public void eliminarCategoria(Categoria categoria);
-
-    public Boolean verificarCategoriaDuplicada(Categoria categoriaNew);
 }

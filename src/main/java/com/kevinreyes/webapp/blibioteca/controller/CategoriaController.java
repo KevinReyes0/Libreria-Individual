@@ -7,8 +7,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,12 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.kevinreyes.webapp.blibioteca.model.Categoria;
 import com.kevinreyes.webapp.blibioteca.service.CategoriaService;
 
 @Controller
 @RestController
 @RequestMapping(value = "")
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class CategoriaController {
 
     @Autowired
@@ -42,19 +46,14 @@ public class CategoriaController {
     }
 
     @PostMapping("/categoria")
-    public ResponseEntity<Map<String, String>> guardarCategoria(@RequestBody Categoria categoria){
-        Map<String, String> response = new HashMap<>();
+    public ResponseEntity<Map<String, Boolean>> guardarCategoria(@RequestBody Categoria categoria){
+        Map<String, Boolean> response = new HashMap<>();
         try {
-            if(categoriaService.guardarCategoria(categoria)){
-                response.put("message", "Categoria agregada con exito");
-                return ResponseEntity.ok(response);
-            }else {
-                response.put("err", "La categoria esta duplicada");
-                return ResponseEntity.badRequest().body(response);
-            }
-            
+            categoriaService.guardarCategoria(categoria);
+            response.put("message", Boolean.TRUE);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            response.put("err", "La categoria no se pudo agregar");
+            response.put("err", Boolean.FALSE);
             return ResponseEntity.badRequest().body(response);
         }
         
@@ -66,14 +65,9 @@ public class CategoriaController {
         try {
             Categoria categoriaAnt = categoriaService.buscarCategoriaPorId(id);
             categoriaAnt.setNombreCategoria(categoriaNueva.getNombreCategoria());
-            if(categoriaService.guardarCategoria(categoriaAnt)){
-                response.put("message", "Categoria editada con exito");
-                return ResponseEntity.ok(response);
-            }else{
-                response.put("message", "La categoria no se pudo editar");
-                return ResponseEntity.badRequest().body(response);
-            }
-            
+            categoriaService.guardarCategoria(categoriaAnt);
+            response.put("message", "Categoria editada con exito");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("message", "La categoria no se pudo editar");
             return ResponseEntity.badRequest().body(response);

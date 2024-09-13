@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kevinreyes.webapp.blibioteca.model.Prestamo;
 import com.kevinreyes.webapp.blibioteca.service.PrestamoService;
-import com.kevinreyes.webapp.blibioteca.utils.MethodType;
 
 @Controller
 @RestController
@@ -50,7 +49,7 @@ public class PrestamoController {
     public ResponseEntity <Map<String, String>> agregarPrestamo(@RequestBody Prestamo prestamo){
         Map<String, String> response  = new HashMap<>();
         try {
-            prestamoService.guardarPrestamo(prestamo, MethodType.POST);
+            prestamoService.guardarPrestamo(prestamo);
             response.put("message", "Prestamo creado con exito");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -72,7 +71,7 @@ public class PrestamoController {
             prestamo.setFechaPrestamo(prestamoNew.getFechaPrestamo());
             prestamo.setLibros(prestamoNew.getLibros());
             prestamo.setVigencia(prestamoNew.getVigencia());
-            prestamoService.guardarPrestamo(prestamo, MethodType.PUT);
+            prestamoService.guardarPrestamo(prestamo);
             response.put("message", "prestamo modificado conexito");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
